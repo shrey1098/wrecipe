@@ -6,7 +6,7 @@ class recipeMultipleSerializer(serializers.ModelSerializer):
     class Meta:
         model = recipe
         fields = (
-            'name', 'recipeType', 'cookingTime', 'picture',
+            'id', 'user_id', 'name', 'recipeType', 'cookingTime', 'picture',
         )
 
 
