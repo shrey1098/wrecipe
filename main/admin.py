@@ -4,7 +4,7 @@ from .models import recipe, savedRecipe
 
 class recipeAdmin(admin.ModelAdmin):
     list_display = ("user", "name", "timestamp", "visibilityType", "recipeType",
-                    "mealType", "servingSize", "cookingTime")
+                    "mealType", "servingSize", "cookingTime", "views")
 
 
 class savedRecipeAdmin(admin.ModelAdmin):
