@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.db.models import F
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,7 +26,9 @@ def recipeMultipleData(request):
 @permission_classes([IsAuthenticated])
 def recipeSingleData(request):
     if request.method == 'GET':
-        qs = recipe.objects.get(pk=request.GET['id'])
+        recipeID = request.GET['id']
+        qs = recipe.objects.get(pk=recipeID)
+        recipe.objects.filter(pk=recipeID).update(views=F('views')+1)
         serializer = recipeSerializer(qs)
         return Response(serializer.data)
     if request.method == 'POST':

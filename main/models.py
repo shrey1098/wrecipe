@@ -29,6 +29,7 @@ class recipe(models.Model):
     cookingTime = models.PositiveIntegerField()
     steps = models.JSONField()
     picture = models.URLField(blank=True, null=True)
+    views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
