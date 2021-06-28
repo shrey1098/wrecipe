@@ -58,6 +58,8 @@ def savedRecipeData(request):
         return Response(serializer.data)
     if request.method == 'POST':
         serializer = savedRecipeSerializer(data=request.data)
+        recipeID = request.data['name']
+        recipe.objects.filter(pk=recipeID).update(saves=F('saves')+1)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

@@ -30,6 +30,7 @@ class recipe(models.Model):
     steps = models.JSONField()
     picture = models.URLField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
+    saves = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
