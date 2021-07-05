@@ -28,7 +28,7 @@ class recipe(models.Model):
     servingSize = models.PositiveSmallIntegerField()
     cookingTime = models.PositiveIntegerField()
     steps = models.JSONField()
-    picture = models.URLField(blank=True, null=True)
+    picture = models.URLField(default='https://raw.githubusercontent.com/shrey1098/img/main/462773.jpg')
     views = models.PositiveIntegerField(default=0)
     saves = models.PositiveIntegerField(default=0)
 
@@ -39,3 +39,20 @@ class recipe(models.Model):
 class savedRecipe(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.ForeignKey(recipe, on_delete=models.CASCADE)
+
+
+class ingredientsList(models.Model):
+    ingredient = models.CharField(max_length=100)
+    hindi_name = models.CharField(max_length=200, blank=True)
+    path = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.ingredient
+
+
+class userIngredients(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ingredient = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.ingredient
