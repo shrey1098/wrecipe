@@ -1,122 +1,140 @@
-# from django.shortcuts import render
-# from django.contrib.auth.models import User
-from django.db.models import F
-
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import recipeMultipleSerializer, recipeSerializer, savedRecipeSerializer, ingredientListSerializer, \
-    userIngredientsSerializer
-from .models import recipe, savedRecipe, ingredientsList, userIngredients
-
-
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def recipeMultipleData(request):
-    if not request.GET:
-        # ToDo: get 15 objects at once, later when user has scrolled through them all call again and return next 15
-        qs = recipe.objects.all()
-        q = list(reversed(qs))
-        serializer = recipeMultipleSerializer(q, many=True)
-        return Response(serializer.data)
-    else:
-        qs = recipe.objects.filter(name__contains=request.GET['query'])
-        serializer = recipeMultipleSerializer(qs, many=True)
-        return Response(serializer.data)
-
-
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def recipeSingleData(request):
-    if request.method == 'GET':
-        recipeID = request.GET['id']
-        qs = recipe.objects.get(pk=recipeID)
-        recipe.objects.filter(pk=recipeID).update(views=F('views') + 1)
-        print(request.user)
-        serializer = recipeSerializer(qs)
-        return Response(serializer.data)
-    if request.method == 'POST':
-        serializer = recipeSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.validated_data['name'] = serializer.validated_data['name'].capitalize()
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+from .serializers import recipeSerializer, userIngredientsSerializer
+from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
+    getSavedRecipes, saveOrUnsave, postDeleteRecipe, getIngredient, getSearchIngredient, postAddNewUserIngredients,\
+    getActionUserIngredients, postActionUserIngredients
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def userRecipeData(request):
-    user = request.user
-    qs = recipe.objects.filter(user=user)
-    serializer = recipeMultipleSerializer(qs, many=True)
-    return Response(serializer.data)
+def recipesData(request):
+    """
+    *api url: /api.recipesdata* \n
+    :param request:
+    :return: json serialized list of all recipes
+    """
+    return getRecipesData(request)
 
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def savedRecipeData(request):
+def recipeData(request):
+    """
+    *api url: /api.recipedata* \n
+    :param request:
+    :return:
+    """
     if request.method == 'GET':
-        user = request.user.id
-        qs = savedRecipe.objects.filter(user=user)
-        serializer = savedRecipeSerializer(qs, many=True)
-        return Response(serializer.data)
+        return getRecipeData(recipeID=request.GET['id'], user=request.user)
+
     if request.method == 'POST':
-        serializer = savedRecipeSerializer(data=request.data)
-        recipeID = request.data['name']
-        recipe.objects.filter(pk=recipeID).update(saves=F('saves') + 1)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+        return postRecipeData(serializer=recipeSerializer(data=request.data))
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recipeSearch(request):
+    """
+    *api url: /api.recipesearch* GET Method only,
+    :param request:
+    :return: 
+    """
+    return getSearchRecipe(query=request.GET['q'])
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def userRecipesData(request):
+    """
+    *api url: api.userrecipesdata *\n
+    :param request:
+    :return:
+    """
+    return getUserRecipes(user=request.user)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def likeRecipe(request):
+    """
+    *api url:/api.likerecipe?id= * \n
+    :param request:
+    :return:Liked or unliked
+    """
+    return likeOrUnlike(recipeID=request.GET['id'], user=request.user)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def savedRecipesData(request):
+    """
+    *api url: /api.savedrecipesdata?id=*\n
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        return getSavedRecipes(user=request.user.id)
+
+    if request.method == 'POST':
+        return saveOrUnsave(recipeID=request.GET['id'], user=request.userr)
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def deleteRecipe(request):
-    recipeID = request.GET['id']
-    user = recipe.objects.filter(pk=recipeID).get().user
-    if user == request.user:
-        recipe.objects.filter(pk=recipeID).delete()
-        return Response({'Deleted Successfully'})
-    else:
-        return Response({'Can not delete other user recipes'})
+    """
+    *api url: api.deleterecipe?id=*\n
+    :param request:
+    :return:
+    """
+    return postDeleteRecipe(recipeID=request.GET['id'], user=request.user)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def ingredientSearch(request):
+    """
+    *api url:/api.ingredientsearch?q=*\n
+    :param request:
+    :return:JSON list of all matching queries
+    """
+    return getSearchIngredient(query=request.GET['q'])
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getIngredients(request):
-    ingredientID = request.GET['id']
-    qs = ingredientsList.objects.get(pk=ingredientID)
-    serializer = ingredientListSerializer(qs)
-    return Response(serializer.data)
+    """
+    *api url: api.getingredients?id=*\n
+    :param request:
+    :return:
+    """
+    return getIngredient(ingredientID=request.GET['id'])
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
-def addNewIngredients(request):
-    serializer = ingredientListSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
+@permission_classes([IsAuthenticated])
+def addUserIngredients(request):
+    """
+    *api url: /api.adduseringredient *\n
+    Adds new ingredients which does not exist in ingredientList model to the user ingredient model.
+    :param request:
+    :return:
+    """
+    return postAddNewUserIngredients(serializer=userIngredientsSerializer(data=request.data))
 
 
 @api_view(['POST', 'GET'])
 @permission_classes([IsAdminUser])
 def actionUserIngredients(request):
-    if request.method =='GET':
-        qs = userIngredients.objects.all()
-        serializer = userIngredientsSerializer(qs, many=True)
-        return Response(serializer.data)
+    """
+    *api url: api.useringredientsaction*\n
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        return getActionUserIngredients()
     if request.method == 'POST':
-        q = request.GET['action']
-        if q == 'add':
-            serializer = userIngredientsSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors)
-        if q == 'clear':
-            userIngredients.objects.all().delete()
-            return Response("Success")
+        action = request.GET['action']
+        postActionUserIngredients(request, action)

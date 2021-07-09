@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-y5=n&f!8-%^!$0=l$c7_q^+g=bl9ai!#p=icx!v0#%(rfrmhr(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.100', '192.168.1.101', '127.0.0.1','0.0.0.0']
+ALLOWED_HOSTS = ['192.168.1.100', '192.168.1.101', '127.0.0.1', '0.0.0.0']
 
 # Application definition
 
@@ -62,8 +62,7 @@ ROOT_URLCONF = 'wrecipe.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
