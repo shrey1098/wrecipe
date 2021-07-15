@@ -30,6 +30,9 @@ class recipe(models.Model):
     steps = models.JSONField()
     picture = models.URLField(default='https://raw.githubusercontent.com/shrey1098/img/main/462773.jpg')
 
+    class Meta:
+        unique_together = ("name", "steps", "picture")
+
     def __str__(self):
         return self.name
 

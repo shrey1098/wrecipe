@@ -65,9 +65,17 @@ class recipeMultipleSerializer(serializers.ModelSerializer):
         )
 
 
-class recipeSerializer(serializers.ModelSerializer):
+class recipeSerializerGet(serializers.ModelSerializer):
     recipeType = ChoiceField(choices=recipe.recipeTypes)
+    mealType = ChoiceField(choices=recipe.mealTypes)
 
+    class Meta:
+        steps = serializers.JSONField
+        model = recipe
+        fields = "__all__"
+
+
+class recipeSerializerPost(serializers.ModelSerializer):
     class Meta:
         steps = serializers.JSONField
         model = recipe

@@ -1,6 +1,6 @@
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import recipeSerializer, userIngredientsSerializer
+from .serializers import recipeSerializerPost, userIngredientsSerializer
 from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
     getSavedRecipes, saveOrUnsave, postDeleteRecipe, getIngredient, getSearchIngredient, postAddNewUserIngredients,\
     getActionUserIngredients, postActionUserIngredients
@@ -29,7 +29,7 @@ def recipeData(request):
         return getRecipeData(recipeID=request.GET['id'], user=request.user)
 
     if request.method == 'POST':
-        return postRecipeData(serializer=recipeSerializer(data=request.data))
+        return postRecipeData(serializer=recipeSerializerPost(data=request.data), user=request.user)
 
 
 @api_view(['GET'])

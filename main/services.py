@@ -1,6 +1,7 @@
 from django.db.models import F
+from rest_framework import status
 from rest_framework.response import Response
-from .serializers import recipeMultipleSerializer, recipeSerializer, ingredientListSerializer, \
+from .serializers import recipeMultipleSerializer, recipeSerializerGet, ingredientListSerializer, \
     userIngredientsSerializer, recipeSearchSerializer, ingredientListSearchSerializer
 from .models import recipe, savedBy, ingredientsList, userIngredients, likedBy, viewedBy
 
@@ -19,7 +20,7 @@ def getRecipesData(request):
     qs = recipe.objects.all()
     q = list(reversed(qs))
     serializer = recipeMultipleSerializer(q, many=True, context={'request': request})
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def getRecipeData(user, recipeID):
@@ -44,11 +45,11 @@ def getRecipeData(user, recipeID):
     except recipe.DoesNotExist:
         return Response('Recipe Does Not Exist')
     viewRecipe()
-    serializer = recipeSerializer(qs)
-    return Response(serializer.data)
+    serializer = recipeSerializerGet(qs)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def postRecipeData(serializer):
+def postRecipeData(serializer, user):
     """
     *api url: /api.recipedata*\n  POST method
     Validates the data sent by the user in the serializer.\n
@@ -58,21 +59,29 @@ def postRecipeData(serializer):
     :return:
     """
     if serializer.is_valid():
-        serializer.validated_data['name'] = serializer.validated_data['name'].capitalize()
-        serializer.save()
-        return Response('Success')
+        if serializer.validated_data['user'] == user:
+            serializer.validated_data['name'] = serializer.validated_data['name'].capitalize()
+            serializer.save()
+            return Response('Success', status=status.HTTP_201_CREATED)
+        else:
+            return Response('not allowed to post')
     return Response(serializer.errors)
 
 
 def getSearchRecipe(query):
     """
-    *api url: /api.recipesearch* GET Method only,\n
+    *api url: /api.recipesearch*\n
+    \n
+    GET Method only\n
     :param query:
-    :return:  serialized JSON response of recipes that contains substring query
+    :return:  serialized JSON response of 10 recipes that contains substring query
     """
     qs = recipe.objects.filter(name__icontains=query)
-    serializer = recipeSearchSerializer(qs, many=True)
-    return Response(serializer.data)
+    if qs is None:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        serializer = recipeSearchSerializer(qs, many=True)
+        return Response(serializer.data[:10], status=status.HTTP_200_OK)
 
 
 def getUserRecipes(user):
