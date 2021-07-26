@@ -166,9 +166,13 @@ def getSearchIngredient(query):
     :param query:
     :return:JSON list of all matching queries
     """
-    qs = ingredientsList.objects.filter(ingredient__icontains=query) or ingredientsList.objects.filter(hindi_name__icontains=query)
-    serializer = ingredientListSearchSerializer(qs, many=True)
-    return Response(serializer.data[:8])
+    if len(query) > 0:
+        qs = ingredientsList.objects.filter(ingredient__icontains=query) or ingredientsList.objects.filter(
+            hindi_name__icontains=query)
+        serializer = ingredientListSearchSerializer(qs, many=True)
+        return Response(serializer.data[:5])
+    else:
+        return Response(None)
 
 
 def getIngredient(ingredientID):

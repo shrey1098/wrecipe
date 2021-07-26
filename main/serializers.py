@@ -103,7 +103,7 @@ class ingredientListSerializer(serializers.ModelSerializer):
 class ingredientListSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = ingredientsList
-        fields = ("ingredient", "hindi_name")
+        fields = "__all__"
 
 
 class userIngredientsSerializer(serializers.ModelSerializer):
