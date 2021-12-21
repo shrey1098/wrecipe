@@ -191,7 +191,7 @@ def postAddNewUserIngredients(serializer):
     *api url: /api.adduseringredient *\n
     Serialized fields = user and ingredients\n
     sent in the body of the post request\n
-    User given ingredient is saved and its count is increased by 1, if already exists count increased by 1
+    User given ingredient is saved and its count is SET TO 1, if already exists count increased by 1
     :param serializer:
     :return:
     """

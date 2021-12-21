@@ -104,7 +104,7 @@ def ingredientSearch(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getIngredients(request):
+def getIngredient(request):
     """
     *api url: api.getingredients?id=*\n
     :param request:
