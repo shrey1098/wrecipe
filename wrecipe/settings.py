@@ -82,10 +82,15 @@ WSGI_APPLICATION = 'wrecipe.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'wrecipe_db_dev',
+        'USER': 'admin',
+        'PASSWORD': 'oLh9Mezm7FwIdTUoWHma',
+        'HOST': 'wrecipe-db-dev.c56ex1tlclak.ap-south-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

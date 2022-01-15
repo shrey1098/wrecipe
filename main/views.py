@@ -38,7 +38,7 @@ def recipeSearch(request):
     """
     *api url: /api.recipesearch* GET Method only,
     :param request:
-    :return: 
+    :return:
     """
     return getSearchRecipe(query=request.GET['q'])
 
