@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-y5=n&f!8-%^!$0=l$c7_q^+g=bl9ai!#p=icx!v0#%(rfrmhr(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.100', '192.168.1.101', '127.0.0.1', '0.0.0.0', '0:8000', '192.168.247.147', '192.168.112.147', ]
+ALLOWED_HOSTS = ['wrecipe-dev-env.eba-j5pdgezn.ap-south-1.elasticbeanstalk.com' ]
 
 # Application definition
 
