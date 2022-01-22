@@ -17,8 +17,8 @@ def getRecipesData(request):
     :param request
     :return: json serialized list of all recipes
     """
-    qs = reversed(recipe.objects.filter().order_by('-id')[:10])
-    q = list(reversed(qs))
+    qs = recipe.objects.filter().order_by('-id')[:10]
+    q = list(qs)
     serializer = recipeMultipleSerializer(q, many=True, context={'request': request})
     return Response(serializer.data, status=status.HTTP_200_OK)
 
