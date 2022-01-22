@@ -56,8 +56,9 @@ def postRecipeData(serializer, user):
     Capitalises the first letter of the name of the recipe\n
     saves the serializer
     :param serializer:
-    :return:
+    :return: statusCode
     """
+    #TODO Check Http Response for all requests
     if serializer.is_valid():
         if serializer.validated_data['user'] == user:
             serializer.validated_data['name'] = serializer.validated_data['name'].capitalize()

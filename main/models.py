@@ -12,6 +12,7 @@ class recipe(models.Model):
     )
     visibilityType = models.CharField(choices=visibilityTypes, max_length=20, default='Public')
     recipeTypes = (
+        #TODO: add other types: Seafood and Egg
         ('V', 'Vegetarian'),
         ('NV', 'Non-Vegetarian'),
         ('VE', 'Vegan'),
