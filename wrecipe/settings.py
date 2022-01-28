@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from telnetlib import AUTHENTICATION
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -94,6 +95,10 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+AUTHENTICATION_BACKENDS =(
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
