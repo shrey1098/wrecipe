@@ -18,4 +18,5 @@ urlpatterns = [
     path('api.apitoken', obtain_auth_token, name='obtainToken'),
     path('api.rest-auth/', include('rest_auth.urls')),
     path('api.rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api.gettoken', views.googleAuthObtainToken,name='googleAuthenticationObtainToken'),
 ]

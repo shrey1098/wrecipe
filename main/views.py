@@ -142,5 +142,5 @@ def actionUserIngredients(request):
 
 def googleAuthObtainToken(request):
     user = request.user.id
-    token =Token.objects.create(user=user)
+    token =Token.objects.get_or_create(user=user)
     return token

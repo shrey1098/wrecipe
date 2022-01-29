@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 ]
 SITE_ID = 1
+LOGIN_REDIRECT_URL = '/api.gettoken'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
