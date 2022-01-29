@@ -6,6 +6,7 @@ from .serializers import recipeSerializerPost, userIngredientsSerializer
 from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
     getSavedRecipes, saveOrUnsave, postDeleteRecipe, getIngredient, getSearchIngredient, postAddNewUserIngredients,\
     getActionUserIngredients, postActionUserIngredients
+from django.http import JsonResponse
 from rest_framework.response import Response
 
 
@@ -143,9 +144,8 @@ def actionUserIngredients(request):
         action = request.GET['action']
         postActionUserIngredients(request, action)
 
-@api_view(('GET','POST'))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+
 def googleAuthObtainToken(request):
     user = request.user.id
     token, created = Token.objects.get_or_create(user_id=user)
-    return Response({'token': token.key})
+    return JsonResponse({'token': token.key, 'user_id': user})
