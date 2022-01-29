@@ -1,11 +1,13 @@
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from .serializers import recipeSerializerPost, userIngredientsSerializer
 from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
     getSavedRecipes, saveOrUnsave, postDeleteRecipe, getIngredient, getSearchIngredient, postAddNewUserIngredients,\
     getActionUserIngredients, postActionUserIngredients
 from rest_framework.response import Response
+
 
 
 @api_view(['GET'])
@@ -141,6 +143,8 @@ def actionUserIngredients(request):
         action = request.GET['action']
         postActionUserIngredients(request, action)
 
+@api_view(('GET','POST'))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def googleAuthObtainToken(request):
     user = request.user.id
     token, created = Token.objects.get_or_create(user_id=user)
