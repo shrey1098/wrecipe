@@ -1,4 +1,5 @@
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from .serializers import recipeSerializerPost, userIngredientsSerializer
 from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
@@ -138,3 +139,8 @@ def actionUserIngredients(request):
     if request.method == 'POST':
         action = request.GET['action']
         postActionUserIngredients(request, action)
+
+def googleAuthObtainToken(request):
+    user = request.user.id
+    token =Token.objects.create(user=user)
+    return token
