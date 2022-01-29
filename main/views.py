@@ -5,6 +5,7 @@ from .serializers import recipeSerializerPost, userIngredientsSerializer
 from .services import getRecipesData, getRecipeData, postRecipeData, getSearchRecipe, getUserRecipes, likeOrUnlike, \
     getSavedRecipes, saveOrUnsave, postDeleteRecipe, getIngredient, getSearchIngredient, postAddNewUserIngredients,\
     getActionUserIngredients, postActionUserIngredients
+from rest_framework.response import Response
 
 
 @api_view(['GET'])
@@ -143,4 +144,4 @@ def actionUserIngredients(request):
 def googleAuthObtainToken(request):
     user = request.user.id
     token, created = Token.objects.get_or_create(user_id=user)
-    return {'token': token}
+    return Response({'token': token.key})
