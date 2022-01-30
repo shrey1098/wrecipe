@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'main',
+    'oauth2_provider',
 
 ]
 SITE_ID = 1
