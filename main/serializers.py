@@ -34,19 +34,18 @@ class recipeSearchSerializer(serializers.ModelSerializer):
 
 class recipeMultipleSerializer(serializers.ModelSerializer):
     recipeType = ChoiceField(choices=recipe.recipeTypes)
-    likes = serializers.SerializerMethodField('get_likes')
+    views = serializers.SerializerMethodField('get_views')
     isLiked = serializers.SerializerMethodField('get_is_liked')
 
     # Use this method for the custom field
-
     @staticmethod
-    def get_likes(obj):
-        liked = recipe.objects.get(name=obj)
-        number_of_likes = liked.likedby_set.all().count()
-        return number_of_likes
+    def get_views(obj):
+        viewed = recipe.objects.get(pk=obj)
+        number_of_views = viewed.viewedby_set.all().count()
+        return number_of_views
 
     def get_is_liked(self, obj):
-        liked = likedBy.objects.filter(recipeName=obj).values('user')
+        liked = likedBy.objects.filter(pk=obj).values('user')
         user = self.validate_user()
         q = {'user': user}
         if q in liked:
@@ -61,18 +60,52 @@ class recipeMultipleSerializer(serializers.ModelSerializer):
     class Meta:
         model = recipe
         fields = (
-            'id', 'name', 'recipeType', 'cookingTime', 'picture', 'likes', 'isLiked',
+            'id', 'name', 'recipeType', 'cookingTime', 'picture', 'views', 'isLiked',
         )
 
 
 class recipeSerializerGet(serializers.ModelSerializer):
     recipeType = ChoiceField(choices=recipe.recipeTypes)
     mealType = ChoiceField(choices=recipe.mealTypes)
+    likes = serializers.SerializerMethodField('get_likes')
+    saves = serializers.SerializerMethodField('get_saves')
+    isSaved = serializers.SerializerMethodField('get_is_saved')
+    views = serializers.SerializerMethodField('get_views')
+
+    @staticmethod
+    def get_likes(obj):
+        liked = recipe.objects.get(pk = obj)
+        number_of_likes = liked.likedby_set.all().count()
+        return number_of_likes
+    @staticmethod
+    def get_saves(obj):
+        saved = recipe.objects.get(pk=obj)
+        number_of_saves = saved.savedby_set.all().count()
+        return number_of_saves
+
+    @staticmethod
+    def get_views(obj):
+        viewed = recipe.objects.get(pk= obj)
+        number_of_views = viewed.viewedby_set.all().count()
+        return number_of_views
+
+    def get_is_saved(self, obj):
+        saved = savedBy.objects.filter(pk=obj).values('user_id')
+        user_id = self.validate_user()
+        q = {'user_id': user_id}
+        if q in saved:
+            return True
+        return False
+
+    def validate_user(self):
+        request = self.context.get('request')
+        if request:
+            return request.user.id
 
     class Meta:
-        steps = serializers.JSONField
         model = recipe
-        fields = "__all__"
+        fields = ('id', 'name', 'recipeType', 'mealType', 'servingSize', 'cookingTime', 'steps',
+                  'picture', 'likes', 'saves', 'is_saved', 'views')
 
 
 class recipeSerializerPost(serializers.ModelSerializer):

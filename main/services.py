@@ -45,7 +45,7 @@ def getRecipeData(user, recipeID):
     except recipe.DoesNotExist:
         return Response('Recipe Does Not Exist')
     viewRecipe()
-    serializer = recipeSerializerGet(qs)
+    serializer = recipeSerializerGet(recipeID)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
