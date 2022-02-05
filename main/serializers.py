@@ -40,12 +40,12 @@ class recipeMultipleSerializer(serializers.ModelSerializer):
     # Use this method for the custom field
     @staticmethod
     def get_views(obj):
-        viewed = recipe.objects.get(pk=obj)
+        viewed = recipe.objects.get(name=obj)
         number_of_views = viewed.viewedby_set.all().count()
         return number_of_views
 
     def get_is_liked(self, obj):
-        liked = likedBy.objects.filter(pk=obj).values('user')
+        liked = likedBy.objects.filter(name=obj).values('user')
         user = self.validate_user()
         q = {'user': user}
         if q in liked:
@@ -74,23 +74,23 @@ class recipeSerializerGet(serializers.ModelSerializer):
 
     @staticmethod
     def get_likes(obj):
-        liked = recipe.objects.get(pk = obj['id'])
+        liked = recipe.objects.get(name = obj)
         number_of_likes = liked.likedby_set.all().count()
         return number_of_likes
     @staticmethod
     def get_saves(obj):
-        saved = recipe.objects.get(pk=obj['id'])
+        saved = recipe.objects.get(name=obj)
         number_of_saves = saved.savedby_set.all().count()
         return number_of_saves
 
     @staticmethod
     def get_views(obj):
-        viewed = recipe.objects.get(pk= obj['id'])
+        viewed = recipe.objects.get(name= obj)
         number_of_views = viewed.viewedby_set.all().count()
         return number_of_views
 
     def get_is_saved(self, obj):
-        saved = savedBy.objects.filter(pk=obj[id]).values('user_id')
+        saved = savedBy.objects.filter(name=obj).values('user_id')
         user_id = self.validate_user()
         q = {'user_id': user_id}
         if q in saved:
