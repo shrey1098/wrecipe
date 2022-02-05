@@ -45,7 +45,7 @@ class recipeMultipleSerializer(serializers.ModelSerializer):
         return number_of_views
 
     def get_is_liked(self, obj):
-        liked = likedBy.objects.filter(name=obj).values('user')
+        liked = likedBy.objects.filter(recipeName=obj).values('user')
         user = self.validate_user()
         q = {'user': user}
         if q in liked:
@@ -90,7 +90,7 @@ class recipeSerializerGet(serializers.ModelSerializer):
         return number_of_views
 
     def get_is_saved(self, obj):
-        saved = savedBy.objects.filter(name=obj).values('user_id')
+        saved = savedBy.objects.filter(recipeName=obj).values('user_id')
         user_id = self.validate_user()
         q = {'user_id': user_id}
         if q in saved:
