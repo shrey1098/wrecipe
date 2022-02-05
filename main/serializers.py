@@ -105,7 +105,7 @@ class recipeSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = recipe
         fields = ('id', 'name', 'recipeType', 'mealType', 'servingSize', 'cookingTime', 'steps',
-                  'picture', 'likes', 'saves', 'is_saved', 'views')
+                  'picture', 'likes', 'saves', 'isSaved', 'views')
 
 
 class recipeSerializerPost(serializers.ModelSerializer):
