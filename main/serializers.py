@@ -74,23 +74,23 @@ class recipeSerializerGet(serializers.ModelSerializer):
 
     @staticmethod
     def get_likes(obj):
-        liked = recipe.objects.get(pk = obj)
+        liked = recipe.objects.get(pk = obj['id'])
         number_of_likes = liked.likedby_set.all().count()
         return number_of_likes
     @staticmethod
     def get_saves(obj):
-        saved = recipe.objects.get(pk=obj)
+        saved = recipe.objects.get(pk=obj['id'])
         number_of_saves = saved.savedby_set.all().count()
         return number_of_saves
 
     @staticmethod
     def get_views(obj):
-        viewed = recipe.objects.get(pk= obj)
+        viewed = recipe.objects.get(pk= obj['id'])
         number_of_views = viewed.viewedby_set.all().count()
         return number_of_views
 
     def get_is_saved(self, obj):
-        saved = savedBy.objects.filter(pk=obj).values('user_id')
+        saved = savedBy.objects.filter(pk=obj[id]).values('user_id')
         user_id = self.validate_user()
         q = {'user_id': user_id}
         if q in saved:
