@@ -91,7 +91,7 @@ def getUserRecipes(user):
     :param user:
     :return: All recipes posted by a user
     """
-    qs = recipe.objects.filter(user=user)
+    qs = recipe.objects.filter(user=user).reverse()
     serializer = recipeMultipleSerializer(qs, many=True)
     return Response(serializer.data)
 
