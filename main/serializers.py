@@ -104,7 +104,7 @@ class recipeSerializerGet(serializers.ModelSerializer):
 
     class Meta:
         model = recipe
-        steps = serializers.JSONField
+        steps = serializers.JSONField()
         fields = ('id', 'name', 'recipeType', 'mealType', 'servingSize', 'cookingTime', 'steps',
                   'picture', 'likes', 'saves', 'isSaved', 'views')
 
