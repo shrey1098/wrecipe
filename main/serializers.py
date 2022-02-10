@@ -90,9 +90,9 @@ class recipeSerializerGet(serializers.ModelSerializer):
         return number_of_views
 
     def get_is_saved(self, obj):
-        saved = savedBy.objects.filter(recipeName=obj).values('user_id')
-        user_id = self.validate_user()
-        q = {'user_id': user_id}
+        saved = savedBy.objects.filter(recipeName=obj).values('user')
+        user = self.validate_user()
+        q = {'user': user}
         if q in saved:
             return True
         return False
