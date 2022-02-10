@@ -82,7 +82,7 @@ def savedRecipesData(request):
         return getSavedRecipes(user=request.user.id)
 
     if request.method == 'POST':
-        return saveOrUnsave(recipeID=request.GET['id'], user=request.userr)
+        return saveOrUnsave(recipeID=request.GET['id'], user=request.user)
 
 
 @api_view(['POST'])
