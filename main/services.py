@@ -24,7 +24,7 @@ def getRecipesData(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def getRecipeData(user, recipeID):
+def getRecipeData(user, recipeID, request):
     """
     *api url: /api.recipedata?id=*\n
     request takes recipe id as a header. Recipe is retrieved with the id.\n
@@ -46,7 +46,7 @@ def getRecipeData(user, recipeID):
     except recipe.DoesNotExist:
         return Response('Recipe Does Not Exist')
     viewRecipe()
-    serializer = recipeSerializerGet(qs)
+    serializer = recipeSerializerGet(qs, context={'request': request})
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 

@@ -31,7 +31,7 @@ def recipeData(request):
     :return:
     """
     if request.method == 'GET':
-        return getRecipeData(recipeID=request.GET['id'], user=request.user)
+        return getRecipeData(recipeID=request.GET['id'], user=request.user, request=request)
 
     if request.method == 'POST':
         return postRecipeData(serializer=recipeSerializerPost(data=request.data), user=request.user)
