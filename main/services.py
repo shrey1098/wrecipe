@@ -1,4 +1,5 @@
 from django.db.models import F
+from django.http import response
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import recipeMultipleSerializer, recipeSerializerGet, ingredientListSerializer, \
@@ -138,10 +139,10 @@ def saveOrUnsave(recipeID, user):
     if not created:
         new_save.delete()
         likeOrUnlike(recipeID, user)
-        return Response('Unsaved')
+        return Response('Unsaved', status= status.HTTP_205_RESET_CONTENT)
     else:
         likeOrUnlike(recipeID, user)
-        return Response('Saved')
+        return Response('Saved', status= status.HTTP_201_CREATED)
 
 
 def postDeleteRecipe(recipeID, user):
