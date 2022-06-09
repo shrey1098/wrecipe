@@ -111,7 +111,6 @@ class recipeSerializerGet(serializers.ModelSerializer):
 
 class recipeSerializerPost(serializers.ModelSerializer):
     class Meta:
-        steps = serializers.JSONField()
         model = recipe
         fields = "__all__"
 
